@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import ContactForm from "./ContactForm.jsx";
 import ContactList from "./ContactList.jsx";
 import Filter from "./Filter.jsx";
-import PropTypes from "prop-types"; 
+// import PropTypes from "prop-types"; 
 
 class App extends Component {
   state = {
@@ -14,6 +14,19 @@ class App extends Component {
     ],
     filter: "",
   };
+
+    componentDidMount() {
+    const storedContacts = localStorage.getItem('contacts');
+    if (storedContacts) {
+      this.setState({ contacts: JSON.parse(storedContacts) });
+    }
+  }
+
+  componentDidUpdate(prevState) {
+    if (prevState.contacts !== this.state.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
 
   handleAddContact = (newContact) => {
     const isNameExists = this.state.contacts.some(
@@ -57,15 +70,15 @@ class App extends Component {
   }
 }
 
-App.propTypes = {
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  filter: PropTypes.string.isRequired,
-};
+// App.propTypes = {
+//   contacts: PropTypes.arrayOf(
+//     PropTypes.shape({
+//       id: PropTypes.string.isRequired,
+//       name: PropTypes.string.isRequired,
+//       number: PropTypes.string.isRequired,
+//     })
+//   ).isRequired,
+//   filter: PropTypes.string.isRequired,
+// };
 
 export default App;
